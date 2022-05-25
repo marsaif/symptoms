@@ -1,0 +1,22 @@
+{% extends 'base.html' %} 
+{% block title %} Order {% endblock %} 
+{% block body %} 
+
+
+<div class="card">
+    <div class="card-header card-no-border ">
+        <div class="w-50 ml-0 mr-0 mx-auto text-center">
+            <h4> Select symptom </h4>
+            <form method="post" action="{% url 'questions-order' %}">
+                {% csrf_token %}
+                <select name="symptom" class="form-select" aria-label="Default select example">
+                {% for symptom in symptoms %}
+                    <option value="{{symptom.id}}"> {{symptom}} </option>
+                {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-danger mt-3 btn-block">Start</button>
+                <form>
+        </div>
+    </div>
+</div>
+  {% endblock %} 

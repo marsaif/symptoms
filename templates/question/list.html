@@ -1,0 +1,126 @@
+{% extends 'base.html' %} 
+{% block title %} Questions {% endblock %} 
+{% block body %} 
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Questions</h5>
+          <a href="{% url 'questions-create' symptom_id %}"><button class="btn btn-primary mt-1"> Add new Question </button> </a>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Question</th>
+                <th scope="col" colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for question in object_list %}
+              <tr>
+                <td>{{question.id}}</td>
+                <td> <a href="{% url 'answers-list' question.id  %}"> {{question.question}} </a> </td>
+                <td>
+                  
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <div class="my-1">
+                        <td>
+                          <a href="{% url 'questions-update' question.id %}"> <button class="btn btn-primary">Modify</button> </a>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'questions-delete' question.id %}">
+                              {% csrf_token %}<input type="submit" value="DELETE" class="btn btn-secondary">
+                           </form>
+                          </td>
+                      <div>
+                  </div>
+                </td>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+
+              <h5 class="modal-title" id="exampleModalLongTitle">Next Question</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">
+                <input type="hidden" name="answer_id" id="answer_id">
+                <select class="form-select" name="next_question">
+                  {% for question in object_list %}
+                    <option  value="{{question.id}}">{{question}}</option>
+                  {% endfor %}
+                </select>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Pagination-->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+          </li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">
+              {{ i }}
+              <span class="sr-only">(current)</span>
+            </span>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      <!--end of Pagination-->
+
+
+      <script> 
+        function item_click(e) {
+          document.getElementById("answer_id").value = e.target.name
+        }
+
+      </script>
+  {% endblock %} 

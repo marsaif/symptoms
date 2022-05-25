@@ -1,0 +1,120 @@
+{% extends 'base.html' %} 
+{% block title %} Questions {% endblock %} 
+{% block body %} 
+
+
+
+
+<div class="card">
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Select Next Question</h5>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form"> 
+            <input type="hidden" name="previous-question">
+            <input type="hidden" name="previous-answer">
+            <Select name="next-question" class="form-select">
+            {% for question in questions %}
+              <option value="{{question.id}}" > {{question}} </option>
+            {% endfor %}
+            </select>
+            <div class="modal-footer">
+              <button type="button" onclick="resetValues()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" onclick="submitNextQuestion(event)" class="btn btn-primary" data-dismiss="modal" >Save changes</button>
+            </div>
+          </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card-header card-no-border">
+        <div class="ml-0 mr-0 mx-auto text-center">
+            <h4> Questions </h4>
+            {% for question in questions %}
+                <div class="card o-hidden">
+                  <div class="card-body">
+                    <div class="media">
+                      <div class="media-body">
+                        <div class="progress-box">
+                          <h4 class="f-w-500 mb-0 f-20">
+                          <span class="counter">{{question}}</span></h4>
+                          {% for answer in question.answer_set.all %}
+                          <button onclick="handleCLick(event)" name="{{question.id}}-{{answer.id}}" id="{{answer.id}}" class="btn btn-secondary mt-3 mx-3 btn-block" data-toggle="modal" data-target="#exampleModal">{{answer}}</button> 
+                          {% endfor %}
+                          <button onclick="handleCLickAny(event)" name="{{question.id}}" id="{{question.id}}" class="btn btn-success mt-3 mx-3 btn-block" data-toggle="modal" data-target="#exampleModal">Any</button> 
+                          <div class="progress sm-progress-bar progress-animate app-right d-flex justify-content-end">
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+
+  var previousQuestion = document.getElementsByName("previous-question")[0];
+  var previousAnswer = document.getElementsByName("previous-answer")[0];
+  var select = document.getElementsByName("next-question")[0];
+
+  function resetValues() {
+    previousQuestion.removeAttribute("value") ; 
+    previousAnswer.removeAttribute("value") ; 
+
+  }
+
+  function handleCLickAny(e) {
+      e.target.classList.remove("btn-success") ;
+      e.target.classList.add("btn-dark") ;
+      console.log(e.target.id) ;
+      previousQuestion.value = e.target.id ; 
+  }
+
+  function handleCLick(e) {
+    e.target.classList.remove("btn-secondary") ;
+    e.target.classList.add("btn-dark") ;
+    console.log(e.target.id)
+
+
+    previousQuestion.value = e.target.name.split("-")[0] ; 
+    previousAnswer.value = e.target.id ; 
+
+  }
+
+  function submitNextQuestion() {
+    var option = select.options[select.selectedIndex];
+
+    data = {
+      'option' : option.getAttribute("value") ,
+      'previousQuestion' : previousQuestion.value , 
+      'previousAnswer' : previousAnswer.value
+
+    }
+
+    console.log(data)
+    fetch("order-qs/", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(data)
+          }).then(res => {
+            console.log("Request complete! response:", res);
+          });
+    
+          resetValues()
+
+     }
+
+</script>
+
+
+  {% endblock %} 

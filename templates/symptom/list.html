@@ -1,0 +1,82 @@
+{% extends 'base.html' %} 
+{% block title %} Symptoms {% endblock %} 
+{% block body %} 
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Symptoms</h5>
+          <a href="{% url 'symptoms-create' %}"><button class="btn btn-primary mt-1"> Add new Symptom </button> </a>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Symptom</th>
+                <th scope="col" colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for symptom in object_list %}
+              <tr>
+                <td>{{symptom.id}}</td>
+                <td> <a href="{% url 'questions-list' symptom.id  %}"> {{symptom.symptom}} </a> </td>
+                <td>
+                  <a href="{% url 'symptoms-update' symptom.id %}"> <button class="btn btn-primary">Modify</button> </a>
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'symptoms-delete' symptom.id %}">
+                      {% csrf_token %}<input type="submit" value="DELETE" class="btn btn-secondary">
+                   </form>
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+      <!--Pagination-->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+          </li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">
+              {{ i }}
+              <span class="sr-only">(current)</span>
+            </span>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      <!--end of Pagination-->
+  {% endblock %} 

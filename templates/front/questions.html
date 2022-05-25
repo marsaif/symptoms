@@ -1,0 +1,99 @@
+{% extends 'base-front.html' %} {% block title %} Questions {% endblock %} 
+{% block body %}
+
+<div class="card">
+  <div class="card-header card-no-border ml-0 mr-0 text-center">
+    <h4>Questions</h4>
+    <div class="card o-hidden">
+      <div class="card-body">
+        <div class="media">
+          <div class="media-body">
+            <div class="progress-box" id="parent">
+              <h4 class="f-w-500 mb-0 f-20">
+                <span class="counter" id="question">{{question}}</span>
+              </h4>
+              {% for answer in question.answer_set.all %}
+              <button
+                onclick="handleClick(event)"
+                name="{{question.id}}-{{answer.id}}"
+                class="btn btn-secondary mt-3 mx-3 btn-block"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                {{answer}}
+              </button>
+              {% endfor %}
+              <div
+                class="progress sm-progress-bar progress-animate app-right d-flex justify-content-end"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function handleClick(e) {
+    let question = document.getElementById("question");
+  
+    const question_id = e.target.name.split("-")[0];
+    const answer_id = e.target.name.split("-")[1];
+    const parent = document.getElementById("parent")
+    data = {
+      question_id: question_id,
+      answer_id: answer_id,
+    };
+
+    let res = await fetch(`../next_question/${question_id}/${answer_id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    res = await res.json();
+    let buttons = document.getElementsByTagName('button')
+    while (element = buttons[0]) {
+      element.parentNode.removeChild(element);
+    }
+    var imgTag = document.getElementsByClassName("img-fluid")
+    console.log(imgTag)
+    if (imgTag[0]){
+      imgTag[0].remove() ;
+    }
+    if (res['question']) 
+    {
+
+      if (res['question']['image']) 
+      {
+        var divTag = document.createElement("div");
+        parent.appendChild(divTag)
+
+        var imgTag = document.createElement("img");
+        imgTag.src = res['question']['image']
+        imgTag.classList.add('img-fluid')
+        imgTag.style.width = "50%"
+        imgTag.style.height = "50%"
+        divTag.appendChild(imgTag)
+
+      }
+      question.innerHTML = res["question"]['question'];
+      for (var i = 0; i < res['answers'].length; i++) {
+        console.log(res['answers'][i])
+        var buttonTag = document.createElement("button");
+        buttonTag.innerHTML = res['answers'][i]['answer'] ;
+        buttonTag.name = `${res["question"]['id']}-${res['answers'][i]['id']}`
+        buttonTag.classList.add("btn","btn-secondary", "mt-3", "mx-3", "btn-block");
+        buttonTag.onclick = function(e) { handleClick(e); };
+        parent.appendChild(buttonTag)
+      }
+    } else {
+      question.innerHTML = "Finished";
+
+    }
+
+
+
+  }
+</script>
+
+{% endblock %}

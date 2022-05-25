@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Update Symptom {% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header card-no-border ">
+        <div class="w-50 ml-0 mr-0 mx-auto text-center">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Submit" class="w-100 mt-2 btn btn-primary btn-block">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
