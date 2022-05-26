@@ -17,7 +17,7 @@ class QuestionListView(LoginRequiredMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super(QuestionListView, self).get_context_data(**kwargs)
-        context['symptom_id'] = self.kwargs['symptom_id']
+        context['symptom'] = Symptom.objects.get(pk=self.kwargs['symptom_id'])
         return context
 
 class QuestionCreateView(LoginRequiredMixin,CreateView):

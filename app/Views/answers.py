@@ -17,7 +17,7 @@ class AnswerListView(LoginRequiredMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AnswerListView, self).get_context_data(**kwargs)
-        context['question_id'] = self.kwargs['question_id']
+        context['question'] = Question.objects.get(pk=self.kwargs['question_id'])
         return context
 
 class AnswerCreateView(LoginRequiredMixin,CreateView):

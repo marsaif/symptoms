@@ -8,8 +8,10 @@
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          <h5>Questions</h5>
-          <a href="{% url 'questions-create' symptom_id %}"><button class="btn btn-primary mt-1"> Add new Question </button> </a>
+          <h5>Questions : {{symptom}}</h5>
+          <a href="{% url 'questions-create' symptom.id %}"><button class="btn btn-primary mt-1"> Add new Question </button> </a>
+          <a href="{% url 'symptoms-list' %}"><button class="btn btn-success pull-right"> Back to Symptom </button> </a>
+
         </div>
         <div class="table-responsive">
           <table class="table">
