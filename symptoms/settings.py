@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(go$8-tu*f!!&mosx8@%pab$p)uf8&so9@2wa53d!xb@ajh#*l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["marseif.pythonanywhere.com"]
 
 
 # Application definition
@@ -123,13 +123,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),) # new
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'uploads') 
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
+
+STATIC_ROOT='/home/marseif/symptoms/static'
+
