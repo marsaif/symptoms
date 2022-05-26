@@ -42,6 +42,12 @@
                   <div class="card-body">
                     <div class="media">
                       <div class="media-body">
+                        <div class="form-check">
+                          <input class="form-check-input" onclick="updateFirstQuestion(event)" type="radio" name="first-question" value="{{question.id}}-{{question.symptom.id}}">
+                          <label class="form-check-label" for="exampleRadios1">
+
+                          </label>
+                        </div>
                         <div class="progress-box">
                           <h4 class="f-w-500 mb-0 f-20">
                           <span class="counter">{{question}}</span></h4>
@@ -66,6 +72,18 @@
   var previousQuestion = document.getElementsByName("previous-question")[0];
   var previousAnswer = document.getElementsByName("previous-answer")[0];
   var select = document.getElementsByName("next-question")[0];
+
+  async function updateFirstQuestion(e)
+  {
+    let question_id = e.target.value.split("-")[0]
+    let symptom_id = e.target.value.split("-")[1]
+    
+    let res = await fetch(`../update-first-question/${question_id}/${symptom_id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    res = await res.json();
+  }
 
   function resetValues() {
     previousQuestion.removeAttribute("value") ; 

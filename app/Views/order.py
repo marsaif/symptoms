@@ -8,7 +8,7 @@ from django.http import JsonResponse
 
 @login_required
 def order(request):
-        symptoms = Symptom.objects.all()
+        symptoms = Symptom.objects.filter(ordered=False)
         context = {
             'symptoms' : symptoms 
         }
@@ -17,6 +17,9 @@ def order(request):
 def list_questions(request):
     if request.method == "POST":
         symptom_id = request.POST['symptom']
+        symptom = Symptom.objects.get(pk=symptom_id)
+        symptom.ordered = True
+        symptom.save()
         questions = Question.objects.filter(symptom_id=symptom_id)
         context = {
             'questions' : questions 
@@ -32,5 +35,13 @@ def order_question(request):
 
     if body['previousAnswer'] : 
         question.previous_answer = body['previousAnswer']
+    question.save()
+    return JsonResponse({'status':'good'})
+
+
+def updateFirstQuestion(request,question_id,symptom_id) : 
+    Question.objects.filter(symptom_id=symptom_id).update(first_question=False)
+    question = Question.objects.get(pk=question_id)
+    question.first_question = True
     question.save()
     return JsonResponse({'status':'good'})

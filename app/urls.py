@@ -4,10 +4,10 @@ from django.urls import include, path
 from app.Views.answers import AnswerCreateView, AnswerDeleteView, AnswerListView, AnswerUpdateView
 from app.Views.dashboard import dashboard
 from app.Views.front import first_question, front, next_question
-from app.Views.order import list_questions, order, order_question
+from app.Views.order import list_questions, order, order_question, updateFirstQuestion
 from app.Views.questions import QuestionCreateView, QuestionDeleteView, QuestionListView, QuestionUpdateView 
 
-from app.Views.symptoms import SymptomListView , SymptomCreateView , SymptomDeleteView , SymptomUpdateView
+from app.Views.symptoms import OrderedSymptomListView, SymptomListView , SymptomCreateView , SymptomDeleteView , SymptomUpdateView, clear_order_symptom
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -29,6 +29,12 @@ urlpatterns = [
     path('', dashboard , name="dashboard") ,
     
     path('order/', order , name="order") ,
+
+    path('ordered-symtoms/', OrderedSymptomListView.as_view() , name="ordered-symptoms") ,
+
+    path('clear-order/<int:symptom_id>/', clear_order_symptom , name="clear-order-symptom") ,
+
+    path('update-first-question/<int:question_id>/<int:symptom_id>', updateFirstQuestion , name="update-first-question") ,
 
     path('symptoms', SymptomListView.as_view() , name="symptoms-list") ,
     path('add-symptom/', SymptomCreateView.as_view() , name="symptoms-create") ,

@@ -2,12 +2,11 @@
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from app.models import Answer, Question, Symptom
-from django.forms.models import model_to_dict
+from app.models import Question, Symptom
 
 
 def front(request):
-        symptoms = Symptom.objects.all()
+        symptoms = Symptom.objects.filter(ordered=True)
         context = {
             'symptoms' : symptoms 
         }
