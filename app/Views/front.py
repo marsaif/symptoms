@@ -15,9 +15,13 @@ def front(request):
 def first_question(request):
     if request.method == "POST":
         symptom_id = request.POST['symptom']
+        symptom = Symptom.objects.filter(id=symptom_id)[0]
         question = Question.objects.filter(symptom_id=symptom_id).filter(first_question=True)
         context = {
-            'question' : question[0]
+            'question' : question[0] , 
+            'description' : symptom.description ,
+            'upload' : symptom.upload,
+            'name' : symptom.symptom
         }
         return render(request,"front/questions.html",context)
 

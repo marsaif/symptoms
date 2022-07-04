@@ -3,6 +3,8 @@ from django import forms
 from app.models import Answer, Question, Symptom
 
 class SymptomForm(forms.ModelForm):
+
+    description = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Symptom
         exclude = ('ordered',)
@@ -11,7 +13,8 @@ class SymptomForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['symptom'].widget.attrs['class'] = 'form-control'
-
+        self.fields['upload'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question

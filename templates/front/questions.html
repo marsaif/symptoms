@@ -1,15 +1,23 @@
 {% extends 'base-front.html' %} {% block title %} Questions {% endblock %} 
 {% block body %}
 
+
 <div class="card">
   <div class="card-header card-no-border ml-0 mr-0 text-center">
-    <h4>Questions</h4>
+    <h4 id="q">Questions</h4>
     <div class="card o-hidden">
       <div class="card-body">
         <div class="media">
           <div class="media-body">
             <div class="progress-box" id="parent">
               <h4 class="f-w-500 mb-0 f-20">
+                <div id="final_info">
+                  <h3 class="mb-4"> {{name}} </h3>
+                  <h4 class="mt-4"> Description </h4>
+                  <p id="description" name="description"> {{description}} </p>
+                  <h6 class="mb-4"> for more info </h6>
+                  <a href="/uploads/{{upload}}">  Download PDF </a>
+                </div>
                 <span class="counter" id="question">{{question}}</span>
               </h4>
               {% for answer in question.answer_set.all %}
@@ -35,6 +43,9 @@
 </div>
 
 <script>
+  let final_info = document.getElementById("final_info");
+  final_info.style.display = 'none';
+
   async function handleClick(e) {
     let question = document.getElementById("question");
   
@@ -87,8 +98,10 @@
         parent.appendChild(buttonTag)
       }
     } else {
-      question.innerHTML = "Finished";
-
+      let q = document.getElementById("q");
+      q.style.display = 'none';
+      question.innerHTML = "";
+      final_info.style.display = 'block';
     }
 
 

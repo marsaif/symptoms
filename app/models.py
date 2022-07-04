@@ -11,6 +11,8 @@ def get_file_path(instance, filename):
 class Symptom(models.Model) : 
     ordered = models.BooleanField(default=False)
     symptom = models.CharField(max_length=1000)
+    upload = models.FileField(upload_to=get_file_path,default=None)
+    description = models.TextField(default='')
 
     def __str__(self) -> str:
         return self.symptom
